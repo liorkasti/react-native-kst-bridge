@@ -27,6 +27,10 @@ buildscript {
 }
 
 
+def isNewArchitectureEnabled() {
+  return project.hasProperty("newArchEnabled") && project.newArchEnabled == "true"
+}
+
 apply plugin: "com.android.library"
 apply plugin: "kotlin-android"
 
@@ -40,10 +44,21 @@ android {
   defaultConfig {
     minSdkVersion getExtOrDefault("minSdkVersion")
     targetSdkVersion getExtOrDefault("targetSdkVersion")
+    buildConfigField("boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString())
   }
 
   buildFeatures {
     buildConfig true
+  }
+
+  sourceSets {
+    main {
+      if (isNewArchitectureEnabled()) {
+        java.srcDirs += ['src/newarch']
+      } else {
+        java.srcDirs += ['src/oldarch']
+      }
+    }
   }
 
   buildTypes {

@@ -111,7 +111,7 @@
   },
   "codegenConfig": {
     "name": "KstRnBackwardArchComptSpec",
-    "type": "modules",
+    "type": "all",
     "jsSrcsDir": "src",
     "android": {
       "javaPackageName": "com.kstrnbackwardarchcompt"
