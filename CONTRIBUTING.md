@@ -25,9 +25,9 @@ The [example app](/example/) demonstrates usage of the library. You need to run 
 
 It is configured to use the local version of the library, so any changes you make to the library's source code will be reflected in the example app. Changes to the library's JavaScript code will be reflected in the example app without a rebuild, but native code changes will require a rebuild of the example app.
 
-If you want to use Android Studio or Xcode to edit the native code, you can open the `example/android` or `example/ios` directories respectively in those editors. To edit the Objective-C or Swift files, open `example/ios/KstRnBackwardArchComptExample.xcworkspace` in Xcode and find the source files at `Pods > Development Pods > kst-rn-backward-arch-compt`.
+If you want to use Android Studio or Xcode to edit the native code, you can open the `example/android` or `example/ios` directories respectively in those editors. To edit the Objective-C or Swift files, open `example/ios/KstBridgeExample.xcworkspace` in Xcode and find the source files at `Pods > Development Pods > react-native-kst-bridge`.
 
-To edit the Java or Kotlin files, open `example/android` in Android studio and find the source files at `kst-rn-backward-arch-compt` under `Android`.
+To edit the Java or Kotlin files, open `example/android` in Android studio and find the source files at `react-native-kst-bridge` under `Android`.
 
 You can use various commands from the root directory to work with the project.
 
@@ -52,7 +52,7 @@ yarn example ios
 To confirm that the app is running with the new architecture, you can check the Metro logs for a message like this:
 
 ```sh
-Running "KstRnBackwardArchComptExample" with {"fabric":true,"initialProps":{"concurrentRoot":true},"rootTag":1}
+Running "KstBridgeExample" with {"fabric":true,"initialProps":{"concurrentRoot":true},"rootTag":1}
 ```
 
 Note the `"fabric":true` and `"concurrentRoot":true` properties.

@@ -1,5 +1,5 @@
 {
-  "name": "kst-rn-backward-arch-compt",
+  "name": "react-native-kst-bridge",
   "version": "0.1.0",
   "description": "Sample Chat SDK for React Native with backward compatibility",
   "main": "./lib/module/index.js",
@@ -32,7 +32,7 @@
     "!**/.*"
   ],
   "scripts": {
-    "example": "yarn workspace kst-rn-backward-arch-compt-example",
+    "example": "yarn workspace react-native-kst-bridge-example",
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
     "prepare": "bob build",
     "typecheck": "tsc",
@@ -110,11 +110,11 @@
     ]
   },
   "codegenConfig": {
-    "name": "KstRnBackwardArchComptSpec",
+    "name": "KstBridgeSpec",
     "type": "all",
     "jsSrcsDir": "src",
     "android": {
-      "javaPackageName": "com.kstrnbackwardarchcompt"
+      "javaPackageName": "com.kstbridge"
     }
   },
   "prettier": {

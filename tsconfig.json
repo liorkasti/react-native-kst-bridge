@@ -2,7 +2,7 @@
   "compilerOptions": {
     "rootDir": ".",
     "paths": {
-      "kst-rn-backward-arch-compt": ["./src/index"]
+      "react-native-kst-bridge": ["./src/index"]
     },
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,

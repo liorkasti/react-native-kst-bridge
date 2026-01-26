@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "KstRnBackwardArchComptExample.app"
-               BlueprintName = "KstRnBackwardArchComptExample"
-               ReferencedContainer = "container:KstRnBackwardArchComptExample.xcodeproj">
+               BuildableName = "KstBridgeExample.app"
+               BlueprintName = "KstBridgeExample"
+               ReferencedContainer = "container:KstBridgeExample.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "KstRnBackwardArchComptExampleTests.xctest"
-               BlueprintName = "KstRnBackwardArchComptExampleTests"
-               ReferencedContainer = "container:KstRnBackwardArchComptExample.xcodeproj">
+               BuildableName = "KstBridgeExampleTests.xctest"
+               BlueprintName = "KstBridgeExampleTests"
+               ReferencedContainer = "container:KstBridgeExample.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "KstRnBackwardArchComptExample.app"
-            BlueprintName = "KstRnBackwardArchComptExample"
-            ReferencedContainer = "container:KstRnBackwardArchComptExample.xcodeproj">
+            BuildableName = "KstBridgeExample.app"
+            BlueprintName = "KstBridgeExample"
+            ReferencedContainer = "container:KstBridgeExample.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "KstRnBackwardArchComptExample.app"
-            BlueprintName = "KstRnBackwardArchComptExample"
-            ReferencedContainer = "container:KstRnBackwardArchComptExample.xcodeproj">
+            BuildableName = "KstBridgeExample.app"
+            BlueprintName = "KstBridgeExample"
+            ReferencedContainer = "container:KstBridgeExample.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
