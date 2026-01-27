@@ -33,3 +33,7 @@ export const {
   promiseNumber,
   reverseString,
 } = KstBridge;
+
+// Export Fabric View Component
+export { KSTFabricView } from './KSTFabricView';
+export type { KSTFabricViewProps } from './KSTFabricView';

@@ -1,4 +1,4 @@
-#import "KstBridge.h"
+#import "KSTNativeModule.h"
 
 /*
     React Native Export Macros:
