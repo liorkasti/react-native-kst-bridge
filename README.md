@@ -1,14 +1,24 @@
 # KST React Native Bridge - Turbo Modules with Backward Compatibility
 
-Showcase for React Native Turbo Modules with full support for both Old and New Architecture.
+A demonstration of React Native's New Architecture ecosystem with TurboModules, Fabric components, EventEmitter, and backward compatibility.
 
-## Features
+## Core Components
 
-- **TurboModule Support** - Full New Architecture implementation
-- **Backward Compatible** - Seamlessly works with Old Architecture
-- **Multiple Method Types** - Promises, callbacks, and synchronous methods
-- **Cross-Platform** - iOS and Android native implementations
-- **Architecture Detection** - Automatically adapts based on `newArchEnabled` flag
+### 🚀 **TurboModule**
+
+High-performance native module system with JSI integration for minimal bridge overhead.
+
+### 🎨 **Fabric Component**
+
+Next-generation UI component with prop-based styling and automatic layout management.
+
+### 📡 **EventEmitter**
+
+Cross-platform event communication system for real-time native-JavaScript data flow.
+
+### 🔄 **Backward Compatible**
+
+Intelligent architecture detection with automatic fallback to legacy systems.
 
 ## Installation
 
@@ -41,6 +51,8 @@ import {
   getOBject,
   promiseNumber,
   callMeLater,
+  KSTFabricView,
+  KSTEventEmitter,
 } from 'react-native-kst-bridge';
 ```
 
@@ -74,6 +86,66 @@ callMeLater(
 // Randomly calls success or failure after 2 seconds
 ```
 
+### Fabric Component
+
+```js
+// Use the Fabric component with custom styling
+<KSTFabricView
+  style={styles.fabricView}
+  message="Hello from Fabric!"
+  backgroundColor="#E3F2FD"
+/>
+```
+
+#### Props
+
+- **`message?: string`** - Text to display in the component
+- **`backgroundColor?: ColorValue`** - Background color of the component
+- **`style?: ViewStyle`** - React Native style object
+
+#### Features
+
+- **New Architecture Support** - Uses Fabric rendering system when available
+- **Backward Compatible** - Falls back to Paper renderer in Old Architecture
+- **Custom Styling** - Supports background color and text customization
+- **TypeScript Support** - Full type safety with prop interfaces
+
+### EventEmitter
+
+```js
+// Listen for events
+const subscription = KSTEventEmitter.addListener('counterUpdate', (count) => {
+  console.log('Counter updated:', count);
+});
+
+// Emit events
+KSTEventEmitter.emit('counterUpdate', 42);
+KSTEventEmitter.emit('userAction', 'button_clicked');
+KSTEventEmitter.emit('dataUpdate', { timestamp: Date.now() });
+
+// Clean up listeners
+subscription.remove();
+```
+
+#### Methods
+
+- **`addListener(eventName: string, callback: Function)`** - Register event listener
+- **`emit(eventName: string, ...args: any[])`** - Emit event with data
+- **`removeListeners(count: number)`** - Remove multiple listeners
+
+#### Supported Events
+
+- **`counterUpdate`** - Counter value updates
+- **`userAction`** - User interaction events
+- **`dataUpdate`** - Data change events
+
+#### Features
+
+- **Cross-Platform** - Works on both iOS and Android
+- **Architecture Agnostic** - Functions on both Old and New Architecture
+- **Type Safety** - TypeScript support for event data
+- **Memory Management** - Proper cleanup and listener management
+
 ## API Reference
 
 ### `multiply(a: number, b: number): Promise<number>`
@@ -102,19 +174,21 @@ Randomly calls either the success or failure callback after 2 seconds.
 
 ## Architecture
 
-This library demonstrates TurboModule implementation with backward compatibility:
+This library demonstrates TurboModule, Fabric Component, and EventEmitter implementation with backward compatibility:
 
-### New Architecture (TurboModules)
+### New Architecture (TurboModules + Fabric)
 
-- Uses `NativeKstBridgeSpec` generated from TypeScript spec
-- Implementation in `android/src/newarch/java/com/kstbridge/KstBridgeModule.kt` and `ios/KstBridge.mm`
+- Uses `NativeKstBridgeSpec` and `KSTEventEmitterSpec` generated from TypeScript specs
+- Implementation in `android/src/newarch/java/com/kstbridge/` and `ios/`
 - Enabled when `newArchEnabled=true` in `gradle.properties`
+- Fabric rendering system for UI components
 
 ### Old Architecture
 
 - Uses `ReactContextBaseJavaModule` for Android
-- Implementation in `android/src/oldarch/java/com/kstbridge/KstBridgeModule.kt`
+- Implementation in `android/src/oldarch/java/com/kstbridge/`
 - Falls back automatically when New Architecture is disabled
+- Paper rendering system for UI components
 
 ### Shared Implementation
 
@@ -122,11 +196,39 @@ This library demonstrates TurboModule implementation with backward compatibility
 - Both architectures delegate to the same core implementation
 - `TurboReactPackage` dynamically sets `isTurboModule` flag based on `BuildConfig.IS_NEW_ARCHITECTURE_ENABLED`
 
-### Method Types
+### Component Types
 
-- **Promises**: `multiply()`, `promiseNumber()` - Async operations
-- **Callbacks**: `callMeLater()` - Success/failure callbacks
-- **Synchronous**: `reverseString()`, `getNumbers()`, `getOBject()` - Immediate return values
+- **TurboModules**: `multiply()`, `promiseNumber()`, `reverseString()`, etc. - Native module methods
+- **Fabric Component**: `KSTFabricView` - Modern UI component with props
+- **EventEmitter**: `KSTEventEmitter` - Cross-platform event system
+
+### Architecture Detection
+
+The library automatically detects and uses the appropriate architecture:
+
+```js
+const IS_NEW_ARCH = (global as any).nativeFabricUIManager != null;
+```
+
+### File Structure
+
+```
+src/
+├── NativeKstBridge.ts           # TurboModule spec
+├── KSTEventEmitter.ts          # EventEmitter spec
+├── KSTFabricViewNativeComponent.ts  # Fabric component spec
+└── index.tsx                   # Main exports
+
+android/
+├── src/main/java/              # New Architecture
+├── src/oldarch/java/           # Old Architecture
+└── build.gradle                # Codegen configuration
+
+ios/
+├── KSTNativeModule.h/.mm       # TurboModule implementation
+├── KSTEventEmitter.h/.mm       # EventEmitter implementation
+└── KSTFabricViewManager.mm     # Fabric component manager
+```
 
 ## Contributing
 

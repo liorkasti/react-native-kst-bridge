@@ -37,3 +37,6 @@ export const {
 // Export Fabric View Component
 export { KSTFabricView } from './KSTFabricView';
 export type { KSTFabricViewProps } from './KSTFabricView';
+
+// Export EventEmitter
+export { default as KSTEventEmitter } from './KSTEventEmitter';

@@ -4,6 +4,27 @@
 #import <React/RCTBridge.h>
 #import <React/RCTUIManager.h>
 
+/*
+    React Native Export Macros:
+
+    RCT_EXPORT_MODULE(): Registers native module. Optional custom name.
+
+    RCT_EXPORT_METHOD: Async methods (promises/callbacks). Old/New Architecture
+   compatible.
+
+    RCT_EXPORT_SYNCHRONOUS_TYPED_METHOD: Sync methods returning typed values.
+   Keep fast.
+
+    RCT_REMAP_METHOD: Different JS name than Objective-C method.
+
+    RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD: Deprecated. Blocks JS thread.
+
+    ViewManager Specific:
+    - RCT_EXPORT_VIEW_PROPERTY: Exposes view properties to JavaScript
+    - view: Returns the native view instance for this ViewManager
+    - requiresMainQueueSetup: Indicates if UI setup must happen on main thread
+*/
+
 #ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
@@ -17,16 +38,22 @@ using namespace facebook::react;
 
 @implementation KSTFabricViewManager
 
+// Register this class as "KSTFabricView" ViewManager with React Native
 RCT_EXPORT_MODULE(KSTFabricView)
 
+// Return the native view instance for this ViewManager
 - (UIView *)view {
   return [[KSTFabricView alloc] init];
 }
 
+// Export view properties to JavaScript - allows setting message from JS
 RCT_EXPORT_VIEW_PROPERTY(message, NSString)
+
+// Export view properties to JavaScript - allows setting backgroundColor from JS
 RCT_EXPORT_VIEW_PROPERTY(backgroundColor, UIColor)
 
 #ifdef RCT_NEW_ARCH_ENABLED
+// Indicate that this ViewManager requires main queue setup for UI operations
 + (BOOL)requiresMainQueueSetup {
   return YES;
 }
@@ -35,6 +62,7 @@ RCT_EXPORT_VIEW_PROPERTY(backgroundColor, UIColor)
 @end
 
 #ifdef RCT_NEW_ARCH_ENABLED
+// New Architecture Fabric Component View implementation
 @interface KSTFabricViewComponentView : RCTViewComponentView
 @end
 
@@ -42,11 +70,13 @@ RCT_EXPORT_VIEW_PROPERTY(backgroundColor, UIColor)
   KSTFabricView *_view;
 }
 
+// Provide component descriptor for New Architecture rendering system
 + (ComponentDescriptorProvider)componentDescriptorProvider {
   return concreteComponentDescriptorProvider<
       KSTFabricViewComponentDescriptor>();
 }
 
+// Initialize the Fabric component view with default props and native view
 - (instancetype)initWithFrame:(CGRect)frame {
   if (self = [super initWithFrame:frame]) {
     static const auto defaultProps =
@@ -62,6 +92,7 @@ RCT_EXPORT_VIEW_PROPERTY(backgroundColor, UIColor)
   return self;
 }
 
+// Update props when JavaScript component properties change
 - (void)updateProps:(Props::Shared const &)props
            oldProps:(Props::Shared const &)oldProps {
   const auto &oldViewProps =
@@ -84,6 +115,7 @@ RCT_EXPORT_VIEW_PROPERTY(backgroundColor, UIColor)
 
 @end
 
+// Return the Fabric component view class for New Architecture
 Class<RCTComponentViewProtocol> KSTFabricViewCls(void) {
   return KSTFabricViewComponentView.class;
 }

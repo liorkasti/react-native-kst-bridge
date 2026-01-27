@@ -10,10 +10,10 @@ import java.util.HashMap
 
 class KstBridgePackage : TurboReactPackage() {
   override fun getModule(name: String, reactContext: ReactApplicationContext): NativeModule? {
-    return if (name == KstBridgeModuleImpl.NAME) {
-      KstBridgeModule(reactContext)
-    } else {
-      null
+    return when (name) {
+      KstBridgeModuleImpl.NAME -> KstBridgeModule(reactContext)
+      "KSTEventEmitter" -> KSTEventEmitter(reactContext)
+      else -> null
     }
   }
 
@@ -25,6 +25,15 @@ class KstBridgePackage : TurboReactPackage() {
               ReactModuleInfo(
                       KstBridgeModuleImpl.NAME,
                       KstBridgeModuleImpl.NAME,
+                      false, // canOverrideExistingModule
+                      false, // needsEagerInit
+                      false, // isCxxModule
+                      isTurboModule // isTurboModule
+              )
+      moduleInfos["KSTEventEmitter"] =
+              ReactModuleInfo(
+                      "KSTEventEmitter",
+                      "KSTEventEmitter",
                       false, // canOverrideExistingModule
                       false, // needsEagerInit
                       false, // isCxxModule

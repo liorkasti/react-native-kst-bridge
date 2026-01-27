@@ -1,9 +1,16 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Button, Platform, StyleSheet, Text, View } from 'react-native';
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+} from 'react-native';
 import {
   callMeLater,
   getNumbers,
   getOBject,
+  KSTEventEmitter,
   KSTFabricView,
   multiply,
   promiseNumber,
@@ -23,6 +30,7 @@ interface LogEntry {
 export default function App() {
   const [result, setResult] = useState<number | null>(null);
   const [logs, setLogs] = useState<LogEntry[]>([]);
+  const [eventCount, setEventCount] = useState(0);
 
   const addLog = useCallback((message: string) => {
     setLogs((prev) => [
@@ -39,6 +47,39 @@ export default function App() {
     multiply(3, 7).then(setResult);
   }, []);
 
+  useEffect(() => {
+    // Listen for counter events
+    const counterSubscription = KSTEventEmitter.addListener(
+      'counterUpdate',
+      (count) => {
+        addLog(`Event: Counter updated to ${count}`);
+        setEventCount((prev) => prev + 1);
+      }
+    );
+
+    // Listen for user action events
+    const actionSubscription = KSTEventEmitter.addListener(
+      'userAction',
+      (action) => {
+        addLog(`Event: User action - ${action}`);
+      }
+    );
+
+    // Listen for data update events
+    const dataSubscription = KSTEventEmitter.addListener(
+      'dataUpdate',
+      (data) => {
+        addLog(`Event: Data updated - ${JSON.stringify(data)}`);
+      }
+    );
+
+    return () => {
+      counterSubscription.remove();
+      actionSubscription.remove();
+      dataSubscription.remove();
+    };
+  }, [addLog]);
+
   return (
     <View style={styles.container}>
       <View style={styles.content}>
@@ -53,55 +94,119 @@ export default function App() {
         <Text style={styles.sectionTitle}>Module Methods</Text>
         <Text>Result: {result ?? 'Loading...'}</Text>
 
-        <Button
-          title="reverse string"
-          onPress={() => {
-            const reversed = reverseString('reverse string');
-            console.log(reversed);
-            addLog(`Reversed: ${reversed}`);
-          }}
-        />
-        <Button
-          title="get number"
-          onPress={() => {
-            const numbers = getNumbers();
-            console.log(numbers);
-            addLog(`Numbers: ${JSON.stringify(numbers)}`);
-          }}
-        />
-        <Button
-          title="get object"
-          onPress={() => {
-            const obj = getOBject();
-            console.log(obj);
-            addLog(`Object: ${JSON.stringify(obj)}`);
-          }}
-        />
-        <Button
-          title="promise"
-          onPress={async () => {
-            addLog('Waiting for promise...');
-            const value = await promiseNumber(5);
-            console.log('promised value is: ', value);
-            addLog(`Promised value: ${value}`);
-          }}
-        />
-        <Button
-          title="callbacks"
-          onPress={() => {
-            addLog('Calling with callbacks...');
-            callMeLater(
-              () => {
-                console.log('success');
-                addLog('Callback: success');
-              },
-              () => {
-                console.log('failure');
-                addLog('Callback: failure');
-              }
-            );
-          }}
-        />
+        <View style={styles.buttonGrid}>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.customButton}
+              onPress={() => {
+                const reversed = reverseString('reverse string');
+                console.log(reversed);
+                addLog(`Reversed: ${reversed}`);
+              }}
+            >
+              <Text style={styles.buttonText}>reverse string</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.customButton}
+              onPress={() => {
+                const numbers = getNumbers();
+                console.log(numbers);
+                addLog(`Numbers: ${JSON.stringify(numbers)}`);
+              }}
+            >
+              <Text style={styles.buttonText}>get number</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.customButton}
+              onPress={() => {
+                const obj = getOBject();
+                console.log(obj);
+                addLog(`Object: ${JSON.stringify(obj)}`);
+              }}
+            >
+              <Text style={styles.buttonText}>get object</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.customButton}
+              onPress={async () => {
+                addLog('Waiting for promise...');
+                const value = await promiseNumber(5);
+                console.log('promised value is: ', value);
+                addLog(`Promised value: ${value}`);
+              }}
+            >
+              <Text style={styles.buttonText}>promise</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.customButton}
+              onPress={() => {
+                addLog('Calling with callbacks...');
+                callMeLater(
+                  () => {
+                    console.log('success');
+                    addLog('Callback: success');
+                  },
+                  () => {
+                    console.log('failure');
+                    addLog('Callback: failure');
+                  }
+                );
+              }}
+            >
+              <Text style={styles.buttonText}>callbacks</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <Text style={styles.sectionTitle}>EventEmitter Tests</Text>
+        <Text>Events Received: {eventCount}</Text>
+
+        <View style={styles.buttonGrid}>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.customButton}
+              onPress={() => {
+                const count = Math.floor(Math.random() * 100);
+                KSTEventEmitter.emit('counterUpdate', count);
+                addLog(`Emitted counter event: ${count}`);
+              }}
+            >
+              <Text style={styles.buttonText}>Emit Counter Event</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.customButton}
+              onPress={() => {
+                KSTEventEmitter.emit('userAction', 'button_clicked');
+                addLog('Emitted user action: button_clicked');
+              }}
+            >
+              <Text style={styles.buttonText}>Emit User Action</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.customButton}
+              onPress={() => {
+                const data = { timestamp: Date.now(), type: 'test' };
+                KSTEventEmitter.emit('dataUpdate', data);
+                addLog(`Emitted data update: ${JSON.stringify(data)}`);
+              }}
+            >
+              <Text style={styles.buttonText}>Emit Data Update</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
         <Text style={styles.sectionTitle}>Logger Component</Text>
         <Logger logs={logs} maxHeight={300} onClear={() => setLogs([])} />
       </View>
@@ -123,31 +228,64 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    backgroundColor: '#fff',
   },
   content: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    padding: 24,
+    padding: 16,
     paddingTop: 60,
   },
   header: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 16,
+    marginBottom: 12,
   },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    marginTop: 16,
-    marginBottom: 8,
+    marginTop: 12,
+    marginBottom: 6,
   },
   fabricView: {
     width: '100%',
     height: 60,
     borderRadius: 8,
-    marginBottom: 16,
+    marginBottom: 12,
+  },
+  buttonGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginBottom: 4,
+  },
+  buttonContainer: {
+    width: '48%',
+    marginBottom: 6,
+  },
+  customButton: {
+    backgroundColor: '#007AFF',
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 44,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
+    textAlign: 'center',
   },
   metadata: {
     padding: 16,

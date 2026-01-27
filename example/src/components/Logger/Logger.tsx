@@ -92,7 +92,8 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   logItem: {
-    height: 40,
+    minHeight: 40,
+    paddingVertical: 8,
     marginVertical: 4,
     borderRadius: 4,
   },
