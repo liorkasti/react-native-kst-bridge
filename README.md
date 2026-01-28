@@ -1,6 +1,14 @@
-# KST React Native Bridge - Turbo Modules with Backward Compatibility
+# KST React Native Bridge
 
 A demonstration of React Native's New Architecture ecosystem with TurboModules, Fabric components, EventEmitter, and backward compatibility.
+The example app allows you to explicitly switch between New and Legacy Architectures, making it easy to validate behavior, performance, and compatibility across both modes.
+
+### React Native Version Compatibility
+
+- **React Native 0.74 and below**: Supports both Old Architecture and New Architecture (TurboModules)
+- **React Native 0.82+**: New Architecture only (Old Architecture deprecated by React Native core team)
+
+For React Native 0.83+, the library will automatically use New Architecture as it's now the default.
 
 ## Core Components
 
@@ -18,7 +26,7 @@ Cross-platform event communication system for real-time native-JavaScript data f
 
 ### 🔄 **Backward Compatible**
 
-Intelligent architecture detection with automatic fallback to legacy systems.
+A clean fallback strategy for legacy (Bridge-based) apps
 
 ## Installation
 
@@ -33,13 +41,6 @@ yarn add react-native-kst-bridge
 ```sh
 cd ios && pod install
 ```
-
-### React Native Version Compatibility
-
-- **React Native 0.74 and below**: Supports both Old Architecture and New Architecture (TurboModules)
-- **React Native 0.82+**: New Architecture only (Old Architecture deprecated by React Native core team)
-
-For React Native 0.83+, the library will automatically use New Architecture as it's now the default.
 
 ## Usage
 

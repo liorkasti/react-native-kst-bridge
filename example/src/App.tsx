@@ -18,7 +18,7 @@ import {
 } from 'react-native-kst-bridge';
 import { Logger } from './components/Logger';
 
-const RN_VERSION = require('react-native/package.json').version;
+import { version as RN_VERSION } from 'react-native/package.json';
 const IS_NEW_ARCH = (global as any).nativeFabricUIManager != null;
 
 interface LogEntry {
